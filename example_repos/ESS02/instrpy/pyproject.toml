@@ -1,0 +1,14 @@
+[project]
+name = "ESS02"
+version = "0.0.0"
+requires-python = ">=3.11"
+dependencies = []
+
+# Optional but modern/typical:
+readme = ""
+license = { text = "Apache-2.0" }
+
+# If you want a specific build backend (recommended), include:
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
