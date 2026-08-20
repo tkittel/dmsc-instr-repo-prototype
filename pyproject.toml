@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcstas-ess-instr-citool"
+version = "0.1.0"
+description = "MCSTAS ESS instruction CITool"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "Peter Willendrup (European Spallation Source ERIC)" },
+  { name = "Thomas Kittelmann (European Spallation Source ERIC)" }
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["mcstas_ess_instr_citool*"]
+
+[project.scripts]
+mcstas-ess-instr-citool = "mcstas_ess_instr_citool.cli:main"
