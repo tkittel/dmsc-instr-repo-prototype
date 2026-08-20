@@ -1,3 +1,21 @@
+_site
+.DS_Store
+
+*.egg-info/
+dist/
+build/
+__pycache__/
+
+.ruff_cache/
+
+/venv/
+
+# Emacs:
+*~
+\#*\#
+.\#*
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
