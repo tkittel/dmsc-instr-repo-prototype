@@ -2,15 +2,15 @@
 # Automatically generated file. 
 # Format:    Python script code
 # McStas <http://www.mcstas.org>
-# Instrument: ESS_instr_template.instr (ESS_instr_template)
+# Instrument: ESS01_main.instr (ESS01_main)
 # Date:       Thu Aug 20 11:08:36 2026
-# File:       ESS_instr_template_generated.py
+# File:       ESS02_main.py
 
 import mcstasscript as ms
 
 # Python McStas instrument description
 def make(input_path=None):
-    instr = ms.McStas_instr("ESS_instr_template_generated", author = "McCode Py-Generator", origin = "ESS DMSC", input_path=input_path)
+    instr = ms.McStas_instr("ESS02_main", author = "McCode Py-Generator", origin = "ESS DMSC", input_path=input_path)
     
 # Add collected DEPENDENCY strings
     instr.set_dependency('')
@@ -1586,4 +1586,4 @@ if __name__ == '__main__':
     #data = sim_widget.get_data()
 
 
-# end of generated Python code ESS_instr_template_generated.py 
+# end of generated Python code ESS02_main.py
