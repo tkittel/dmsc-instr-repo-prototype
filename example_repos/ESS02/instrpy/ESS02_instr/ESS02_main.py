@@ -1527,6 +1527,14 @@ def make(input_path=None):
     
     # Instruct McStasscript not to 'check everythng'
     instr.settings(checks=False)
+
+    # PWFIXME: Parameters added by hand.
+    # PWTODO:  Add check for local "tests.py" or equivalent + run and add from there?
+    instr.set_parameters(sector='"S"')
+    instr.set_parameters(beamline=2)
+    instr.set_parameters(cold=0.5)
+    instr.add_test("Monitor2_xy1", intensity=1.59e+11, included_pars=["sector","beamline","cold"])
+
     return instr
 
 
