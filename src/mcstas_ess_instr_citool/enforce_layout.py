@@ -48,7 +48,8 @@ def enforce_instr_layout(project_dir: str) -> Dict:
 
         all_files = [
             f for f in os.listdir(base_dir)
-            if os.path.isfile(os.path.join(base_dir, f))
+            if ( os.path.isfile(os.path.join(base_dir, f))
+                 and not f.endswith('~') )
         ]
 
         project_name: Optional[str] = None
@@ -109,6 +110,9 @@ def enforce_instr_layout(project_dir: str) -> Dict:
         if len(set(mode_names)) != len(mode_names):
             dupes = sorted({m for m in mode_names if mode_names.count(m) > 1})
             raise ValueError(f"Duplicate mode name(s) found: {dupes}")
+
+        if any( m.lower().strip()=='main' for m in mode_names ):
+            raise ValueError('"main" is not allowed as a mode name')
 
         return {
             "project_name": project_name,
