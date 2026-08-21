@@ -2,11 +2,12 @@
 # Automatically generated file. 
 # Format:    Python script code
 # McStas <http://www.mcstas.org>
-# Instrument: ESS01_main.instr (ESS01_main)
-# Date:       Thu Aug 20 11:08:36 2026
+# Instrument: ESS02_main.instr (ESSinstr_main)
+# Date:       Fri Aug 21 11:38:16 2026
 # File:       ESS02_main.py
 
 import mcstasscript as ms
+import argparse
 
 # Python McStas instrument description
 def make(input_path=None):
@@ -16,13 +17,13 @@ def make(input_path=None):
     instr.set_dependency('')
 
     # *****************************************************************************
-    # * Start of instrument 'ESS_instr_template' generated code
+    # * Start of instrument 'ESS02_main' generated code
     # *****************************************************************************
-    # MCSTAS system dir is "/Users/peterwillendrup/micromamba/envs/mcstas-dev/share/mcstas/resources//"
+    # MCSTAS system dir is "/Users/peterwillendrup/micromamba/envs/mcstas-dev/share/mcstas/resources/"
 
 
     # *****************************************************************************
-    # * instrument 'ESS_instr_template' and components DECLARE
+    # * instrument 'ESS02_main' and components DECLARE
     # *****************************************************************************
 
     # Instrument parameters:
@@ -133,7 +134,7 @@ def make(input_path=None):
     uv_T0 = instr.add_user_var("double ", "T0", comment="USERVAR added by McCode py-generator")
     uv_L0 = instr.add_user_var("double ", "L0", comment="USERVAR added by McCode py-generator")
     # *****************************************************************************
-    # * instrument 'ESS_instr_template' TRACE
+    # * instrument 'ESS02_main' TRACE
     # *****************************************************************************
     
     # Comp instance Origin, placement and parameters
@@ -1526,64 +1527,62 @@ def make(input_path=None):
     
     # Instruct McStasscript not to 'check everythng'
     instr.settings(checks=False)
-
-    # PWFIXME: Parameters added by hand.
-    # PWTODO:  Add check for local "tests.py" or equivalent + run and add from there?
-    instr.set_parameters(sector='"S"')
-    instr.set_parameters(beamline=2)
-    instr.set_parameters(cold=0.5)
-    instr.add_test("Monitor2_xy1", intensity=1.59e+11, included_pars=["sector","beamline","cold"])
-
     return instr
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--diagram', action='store_true', help='Show diagram (default False)')
+    parser.add_argument('--display', action='store_true', help='Run a visualisation (default False)')
+    parser.add_argument('--run', action='store_true', help='Run a simulation (default False. Default implies creation of bare .instr.)')
+    parser.add_argument('--plot', action='store_true', help='Run plotter (default False and always off without --run)')
+    args = parser.parse_args()
+
+    # Always generate instr object
     instr=make()
     # Use instr.settings() to add e.g. seed=1000, ncount=1e7, mpi=8, openacc=True, force_compile=False etc.)
-    
 
-# Show diagram
-    instr.show_diagram()
-    
+    # Show diagram
+    if args.diagram:
+        instr.show_diagram()
 
-# Visualise with default parameters (defaults to 'webgl-legacy' visualisation)
-    instr.show_instrument()
-    
+    # Visualise with default parameters (defaults to 'webgl-legacy' visualisation)
+    if args.display:
+        instr.show_instrument()
 
-# Generate a dataset with default parameters.
-    data = instr.backengine()
-    
-# Overview plot:
-    ms.make_sub_plot(data)
-    
+    # Generate a dataset with default parameters.
+    if args.run:
+        data = instr.backengine()
+    else:
+        instr.write_full_instrument()
 
-# Other useful commands follow...
-    
-# One plot pr. window
+    # Overview plot:
+    if args.plot and args.run:
+        ms.make_sub_plot(data)
+
+    # Other useful commands follow...
+    # One plot pr. window
     #ms.make_plot(data)
-    
-# Load another dataset
-    #data2 = ms.load_data('some_other_folder')
-    
-# Adjusting a specific plot
-    #ms.name_plot_options("PSD_4PI", data, log=1, colormap="hot", orders_of_mag=5)
-    
 
-# Bring up the 'interface' - only relevant in Jupyter
+    # Load another dataset
+    #data2 = ms.load_data('some_other_folder')
+
+    # Adjusting a specific plot
+    #ms.name_plot_options("PSD_4PI", data, log=1, colormap="hot", orders_of_mag=5)
+
+    # Bring up the 'interface' - only relevant in Jupyter
     #%matplotlib widget
     #import mcstasscript.jb_interface as ms_widget
     #ms_widget.show(data)
-    
 
-# Bring up the simulation 'interface' - only relevant in Jupyter
+    # Bring up the simulation 'interface' - only relevant in Jupyter
     #%matplotlib widget
     #import mcstasscript.jb_interface as ms_widget
     #sim_widget = ms_widget.SimInterface(instr)
     #sim_widget.show_interface()
-    
 
-# Acessing data from the interface
+    # Acessing data from the interface
     #data = sim_widget.get_data()
 
 
-# end of generated Python code ESS02_main.py
+# end of generated Python code ESS01_main_generated.py 
