@@ -1,0 +1,40 @@
+import subprocess
+
+minimum_mcstas_version = (3,7,19)
+
+_cache = [None]
+def mcstas_info():
+    if _cache[0] is not None:
+        return _cache[0]
+    import shutil
+    def cmd(n):
+        c = shutil.which(n)
+        if not c:
+            raise RuntimeError(f'Command not found: {n}')
+        return c
+    cmds = dict( (n,cmd(n)) for n in ['mcstas','mcrun','mctest'] )
+    o = subprocess.run( [cmds['mcstas'], "--version-num"],
+                        check=True, capture_output=True,
+                        text=True ).stdout.strip()
+    major, minor, patch = o.split(".", 2)
+    version = ( int(major), int(minor), int(patch) )
+    if not version >= minimum_mcstas_version:
+        #fixme test:
+        raise RuntimeError('Too old McStas found: '
+                           '%i.%i.%i (needs %i.%i.%i)'%(*version,
+                                                        *minimum_mcstas_version))
+    _cache[0] = { 'cmd' : cmds, 'version' : version }
+    return _cache[0]
+
+def get_nprocs( nice_factor = 0.9 ):
+    import os
+    if hasattr(os,'sched_getaffinity'):
+        n = len(os.sched_getaffinity(0))
+    else:
+        import multiprocessing
+        n = multiprocessing.cpu_count()
+    n = min(1024,max(1,n))
+    if n >= 4:
+        #Be nice, leave a tiny bit for other tasks on the machine:
+        n = round( n * nice_factor )
+    return n

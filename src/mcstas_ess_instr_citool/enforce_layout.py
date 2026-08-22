@@ -111,8 +111,9 @@ def enforce_instr_layout(project_dir: str) -> Dict:
             dupes = sorted({m for m in mode_names if mode_names.count(m) > 1})
             raise ValueError(f"Duplicate mode name(s) found: {dupes}")
 
-        if any( m.lower().strip()=='main' for m in mode_names ):
-            raise ValueError('"main" is not allowed as a mode name')
+        for pat in ['main','test']:
+            if any( m.lower().strip()==pat for m in mode_names ):
+                raise ValueError(f'"{pat}" is not allowed as a mode name')
 
         return {
             "project_name": project_name,

@@ -96,11 +96,14 @@ def main( argv = None ):
     elif args.action=='check':
         print("File and directory structure OK")
     elif args.action=='generate':
+        from .generate import generate
         with OutDirMgr(args.outdir) as outdir:
-            from .generate import generate
             generate(info,outdir)
     else:
-        print("not implemented")
+        assert args.action=='runci'
+        from .runtest import runtest
+        with OutDirMgr(args.outdir) as outdir:
+            runtest(info,outdir)
 
 if __name__ == "__main__":
     main()
