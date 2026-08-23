@@ -5,16 +5,18 @@ import json
 def runtest( info, outdir ):
     from .util import mcstas_info
     from .generate import generate
-    do_mpi = False
+    do_mpi = False # FIXME make this work
     if do_mpi:
         from .util import get_nprocs
         nprocs = get_nprocs()
     mctest_cmd = mcstas_info()['cmd']['mctest']
-    generate( info, outdir )
+    instrdir = generate( info, outdir )
     testdir = outdir.joinpath('tests').absolute().resolve()
-    cmd = ['--mpi', str(nprocs) ] if do_mpi else []
-    cmd += [ '--local', str(outdir), '--testdir', str(testdir) ]
-    #fixme: add --strict to cmd (and update minimum mcstas version in util.py):
+    cmd = []
+    cmd += [ '--strict' ]
+    if do_mpi:
+        cmd += ['--mpi', str(nprocs) ]
+    cmd += [ '--local', str(instrdir), '--testdir', str(testdir) ]
     print(f"Launching: mctest {shlex.join(cmd)}")
     ec = subprocess.run( [ mctest_cmd ] + cmd,
                          check = False, capture_output = False )

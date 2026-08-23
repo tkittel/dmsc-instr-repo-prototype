@@ -5,6 +5,22 @@ import sys
 import traceback
 import os
 
+def generate( info, outdir ):
+    assert outdir.is_dir()
+    instrdir = outdir.joinpath('instr')
+    genfct = _genpy if info['layout']=='instrpy' else _gen
+    setups = info['setups']
+    if not setups:
+        raise RuntimeError('No instruments found!')
+    assert len(setups) == len(set(k for k in setups))
+    instrdir.mkdir()
+    for k,v in setups.items():
+        d = instrdir.joinpath(k)
+        d.mkdir()
+        os.chdir(d)
+        genfct( k, P(v), d )
+    return instrdir
+
 def is_empty_dir(path: str | Path) -> bool:
     path = Path(path)
     return path.is_dir() and not any(path.iterdir())
@@ -90,12 +106,3 @@ def P(p):
 def _gen( name, srcpath, outdir):
     print(f"Copying {srcpath.name}")
     outdir.joinpath(srcpath.name).write_text( srcpath.read_text() )
-
-def generate( info, outdir ):
-    assert outdir.is_dir()
-    genfct = _genpy if info['layout']=='instrpy' else _gen
-    for k,v in info['setups'].items():
-        d = outdir.joinpath(k)
-        d.mkdir()
-        os.chdir(d)
-        genfct( k, P(v), d )
