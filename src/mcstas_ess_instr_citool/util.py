@@ -1,6 +1,6 @@
 import subprocess
 
-minimum_mcstas_version = (3,7,21)
+minimum_mcstas_version = (3,7,22)
 
 _cache = [None]
 def mcstas_info():
