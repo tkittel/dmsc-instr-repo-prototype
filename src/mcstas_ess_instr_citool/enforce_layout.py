@@ -30,6 +30,14 @@ def enforce_instr_layout(project_dir: str) -> Dict:
     instr_dir = os.path.join(project_dir, "instr")
     instrpy_dir = os.path.join(project_dir, "instrpy")
 
+
+    condareqfile = os.path.join(project_dir, "conda.yml")
+    if not os.path.isfile(condareqfile):
+        raise ValueError(f"Missing conda requirements file: {condareqfile}")
+
+    from .check_condayml import validate_conda_requirements
+    condareq = validate_conda_requirements(condareqfile)
+
     has_instr = os.path.isdir(instr_dir)
     has_instrpy = os.path.isdir(instrpy_dir)
 
@@ -117,6 +125,7 @@ def enforce_instr_layout(project_dir: str) -> Dict:
 
         return {
             "project_name": project_name,
+            "condareq" : condareq,
             "main": {"filename": f"{project_name}_main{ext}", "path": main_path},
             "modes": [
                 {"mode": mode, "path": path}

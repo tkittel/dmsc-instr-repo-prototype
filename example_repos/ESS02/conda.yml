@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  - mcstas >= 3.2.27
+  - python>=3.12
+  - pip
+#  - pip:
+#    - somepypionly
+  - numpy >= 1.26
