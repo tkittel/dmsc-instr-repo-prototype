@@ -63,7 +63,7 @@ def enforce_instr_layout(project_dir: str) -> Dict:
 
         all_files = [
             f for f in os.listdir(base_dir)
-            if not f.endswith('~')
+            if not f.endswith('~') and not f=='__pycache__'
         ]
 
         allowed_subdirs_found = []

@@ -19,6 +19,16 @@ def generate( info, outdir ):
         d.mkdir()
         os.chdir(d)
         genfct( k, P(v), d )
+        for subdirname, fns in sorted(info["extra_files"].items()):
+            sd = d.joinpath(subdirname)
+            sd_src = P(v).parent.joinpath(subdirname)
+            assert sd_src.is_dir()
+            print(f"Making directory {sd.name}/")
+            sd.mkdir()
+            os.chdir(sd)
+            for fn in fns:
+                _gen( k, sd_src.joinpath(fn), sd )
+
     return instrdir
 
 def is_empty_dir(path: str | Path) -> bool:
