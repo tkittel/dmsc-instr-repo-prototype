@@ -1,0 +1,75 @@
+/*******************************************************************************
+* Instrument: ESSinstr_main
+*
+* %I
+* Written by: Peter Willendrup <pkwi@fysik.dtu.dk>
+* Date: 2016-09-26
+* Origin: ESS
+* %INSTRUMENT_SITE: ESS
+*
+* Test instrument for the updated BF1 butterfly moderator design including a simple guide.
+*
+* %D
+* Test instrument for the updated BF1 butterfly moderator design including a simple guide with 10 m straight flight-path followed by a 50 m curved guide.
+*
+* The below example gives a 50-50 (statistics-wise) cold/thermal beam at beamline S2.
+* Example: sector=S beamline=2 cold=0.5 Detector: Monitor2_xy1_I=1.59e+11
+*
+* Use the ESS_butterfly_MCPL_test instrument for direct comparison with MCPL-based source descriptions.
+*
+* %Example: sector=S beamline=2 cold=0.5 Detector: Monitor2_xy1_I=1.59e+11
+*
+*
+* %P
+* sector:        [str]  Defines the 'sector' of your instrument position. Valid values are "N","S","E" and "W"
+* beamline:      [1]    Defines the 'beamline number' of your instrument position. Valid values are 1..10 or 1..11 depending on sector
+* Lmin:          [AA]   Minimum wavelength simulated
+* Lmax:          [AA]   Maximum wavelength simulated
+* c_performance: [1]    Cold brilliance scalar performance multiplicator c_performance > 0
+* t_performance: [1]    Thermal brilliance scalar performance multiplicator t_performance > 0
+* index:         [1]    Target index for source focusing. Defaults to illuminate the "cold collimated" brilliance monitor, thereby suppressing "dist"
+* dist:          [m]    Distance from origin to focusing rectangle; at (0,0,dist) - alternatively use target_index
+* cold:          [1]    Defines the statistical fraction of events emitted from the cold part of the moderator
+* Yheight:       [m]    Defines the moderator height. Valid values are 0.03 m and 0.06 m
+* delta:         [m]    Parameter that allows to scan "collimator" position
+* n_pulses:      [1]    Number of pulses to simulate
+* allmons:       [1]    Flag to include also debugging-monitor output
+*
+* %L
+* <reference/HTML link>
+* Benchmarking website available at <a href="http://ess_butterfly.mcstas.org">http://ess_butterfly.mcstas.org</a>
+* %E
+*******************************************************************************/
+
+DEFINE INSTRUMENT ESS03_Wrapper(int sample = 1)
+
+DECLARE %{
+#include "includes/instr_declare.h"
+%}
+
+INITIALIZE %{
+#include "includes/instr_initialize.h"
+%}
+
+TRACE
+
+%include "snippets/ESS03.instr"
+
+
+COMPONENT Origin = Progress_bar()
+AT (0, 0, 0) ABSOLUTE
+
+COMPONENT Sample1 = Incoherent(radius=0.01,yheight=0.01)
+WHEN sample==1 AT (0,0,0.5) RELATIVE Flux_end
+
+COMPONENT Sample2 = PowderN(radius=0.01,yheight=0.01,reflections="Al_sg225.ncmat")
+WHEN sample==2 AT (0,0,0.5) RELATIVE Flux_end
+
+COMPONENT Detector=Monitor_nD(xwidth=1,yheight=1,filename="Detector",options="x, y", bins=100)
+  AT (0, 0, 1) RELATIVE Flux_end
+
+FINALLY
+%{
+%}
+
+END
